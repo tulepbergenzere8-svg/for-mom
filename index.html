@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С Днём Рождения, Мама!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+            color: #ff69b4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #fff;
+            text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 30px #ff007f;
+            padding: 20px;
+        }
+
+        .text-step {
+            display: none;
+            font-size: 3rem;
+            font-weight: bold;
+            animation: fadeInOut 2.5s ease-in-out forwards;
+        }
+
+        .heart-box {
+            display: none;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            animation: fadeIn 2s ease-in-out forwards;
+        }
+
+        .heart {
+            font-size: 5rem;
+            color: #ff1493;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px #ff1493;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: scale(0.8); }
+            30% { opacity: 1; transform: scale(1.1); }
+            70% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.2); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix"></canvas>
+
+    <div class="content">
+        <!-- Шаги анимации -->
+        <div class="text-step" id="step1">3</div>
+        <div class="text-step" id="step2">2</div>
+        <div class="text-step" id="step3">1</div>
+        <div class="text-step" id="step4">С Днём Рождения!</div>
+        <div class="text-step" id="step5">Любимая Мама ❤️</div>
+
+        <!-- Финальный блок с сердцем -->
+        <div class="heart-box" id="finalStep">
+            <div class="heart">💖</div>
+            <p>Желаю тебе крепкого здоровья,<br>счастья и улыбок каждый день!</p>
+            <p style="margin-top: 10px; font-weight: bold;">Спасибо за всё!</p>
+        </div>
+    </div>
+
+    <script>
+        // Настройка анимации "Матрицы"
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const alphabet = katakana + latin;
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const rainDrops = Array.from({ length: columns }).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#ff69b4'; // Розовый цвет матрицы
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
